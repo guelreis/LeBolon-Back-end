@@ -9,10 +9,10 @@ app.get('/mesas', async (_req, res) => {
     const [rows] = await db.query('SELECT * FROM mesas');
     res.json(rows);
   } catch (err) {
+    console.error('Erro ao buscar mesas:', err);  // Mostra o erro no console
     res.status(500).json({ error: 'Erro ao buscar mesas' });
   }
 });
-
 
 app.post('/mesas', async (req, res) => {
   const { numero } = req.body;
