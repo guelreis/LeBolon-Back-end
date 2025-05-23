@@ -1,4 +1,6 @@
 require('dotenv').config();
+console.log('DATABASE_URL:', process.env.DATABASE_URL);  // <<< ADICIONE ISSO
+
 const mysql = require('mysql2/promise');
 const url = require('url');
 
