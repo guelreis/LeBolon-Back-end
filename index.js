@@ -29,13 +29,13 @@ app.get('/mesas/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const [result] = await db.query('SELECT FROM mesas WHERE id = ?', [id]);
+    const [result] = await db.query('SELECT * FROM mesas WHERE id = ?', [id]);
 
-    if (result.affectedRows === 0) {
+    if (result.length === 0) {
       return res.status(404).json({ error: 'Mesa não encontrada' });
     }
 
-    res.json(rows[0]);
+    res.json(result[0]);
   } catch (err) {
     console.error('Erro ao buscar mesa:', err);
     res.status(500).json({ error: 'Erro ao buscar mesa' });
@@ -50,7 +50,7 @@ app.delete('/mesas/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM mesas WHERE id = ?', [id]);
 
-    if (result.affectedRows === 0) {
+    if (result.length === 0) {
       return res.status(404).json({ error: 'Mesa não encontrada' });
     }
 
@@ -77,7 +77,7 @@ app.delete('/garcons/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM garcons WHERE id = ?', [id]);
 
-    if (result.affectedRows === 0) {
+    if (result.length === 0) {
       return res.status(404).json({ error: 'Garçons não encontrada' });
     }
 
@@ -177,7 +177,7 @@ app.put('/reservas/:id', async (req, res) => {
       [data, hora, mesa_id, qtd_pessoas, nome_responsavel, garcom_id || null, id]
     );
 
-    if (result.affectedRows === 0) {
+    if (result.length === 0) {
       return res.status(404).json({ error: 'Reserva não encontrada' });
     }
 
@@ -205,7 +205,7 @@ app.delete('/reservas/:id', async (req, res) => {
   try {
     const [result] = await db.query('DELETE FROM reservas WHERE id = ?', [id]);
 
-    if (result.affectedRows === 0) {
+    if (result.length === 0) {
       return res.status(404).json({ error: 'Reserva não encontrada' });
     }
 
