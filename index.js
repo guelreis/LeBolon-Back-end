@@ -14,24 +14,6 @@ app.get('/mesas', async (_req, res) => {
   }
 });
 
-app.get('/mesas/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const [result] = await db.query('SELECT FROM mesas WHERE id = ?', [id]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Mesa não encontrada' });
-    }
-
-    res.json({ message: 'Mesa excluída com sucesso' });
-  } catch (err) {
-    console.error('Erro ao excluir mesa:', err);
-    res.status(500).json({ error: 'Erro ao excluir mesa' });
-  }
-});
-
-
 app.post('/mesas', async (req, res) => {
   const { numero } = req.body;
   try {
@@ -42,6 +24,24 @@ app.post('/mesas', async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+app.get('/mesas/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await db.query('SELECT FROM mesas WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Mesa não encontrada' });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('Erro ao buscar mesa:', err);
+    res.status(500).json({ error: 'Erro ao buscar mesa' });
+  }
+});
+
 
 
 app.delete('/mesas/:id', async (req, res) => {
