@@ -14,6 +14,24 @@ app.get('/mesas', async (_req, res) => {
   }
 });
 
+app.get('/mesas/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await db.query('SELECT FROM mesas WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Mesa não encontrada' });
+    }
+
+    res.json({ message: 'Mesa excluída com sucesso' });
+  } catch (err) {
+    console.error('Erro ao excluir mesa:', err);
+    res.status(500).json({ error: 'Erro ao excluir mesa' });
+  }
+});
+
+
 app.post('/mesas', async (req, res) => {
   const { numero } = req.body;
   try {
@@ -130,6 +148,56 @@ app.post('/reservas', async (req, res) => {
     res.status(500).json({ error: 'Erro ao criar reserva' });
   }
 });
+
+app.put('/reservas/:id', async (req, res) => {
+  const { id } = req.params;
+  const {
+    data,
+    hora,
+    mesa_id,
+    qtd_pessoas,
+    nome_responsavel,
+    garcom_id // opcional
+  } = req.body;
+
+  if (!data || !hora || !mesa_id || !qtd_pessoas || !nome_responsavel) {
+    return res.status(400).json({ error: 'Preencha todos os campos obrigatórios' });
+  }
+
+  try {
+    const [result] = await db.query(
+      `UPDATE reservas SET
+        data = ?,
+        hora = ?,
+        mesa_id = ?,
+        qtd_pessoas = ?,
+        nome_responsavel = ?,
+        garcom_id = ?
+      WHERE id = ?`,
+      [data, hora, mesa_id, qtd_pessoas, nome_responsavel, garcom_id || null, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Reserva não encontrada' });
+    }
+
+    res.json({
+      id,
+      data,
+      hora,
+      mesa_id,
+      qtd_pessoas,
+      nome_responsavel,
+      garcom_id: garcom_id || null,
+      status: 'atualizada'
+    });
+
+  } catch (err) {
+    console.error('Erro ao atualizar reserva:', err);
+    res.status(500).json({ error: 'Erro ao atualizar reserva' });
+  }
+});
+
 
 app.delete('/reservas/:id', async (req, res) => {
   const { id } = req.params;
