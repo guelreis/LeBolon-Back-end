@@ -6,13 +6,29 @@ app.use(express.json());
 
 app.get('/mesas', async (_req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM mesas');
-    res.json(rows);
+    const [result] = await db.query('SELECT * FROM mesas');
+    res.json(result);
   } catch (err) {
-    console.error('Erro ao buscar mesas:', err);  // Mostra o erro no console
+    console.error('Erro ao buscar mesas:', err);
     res.status(500).json({ error: 'Erro ao buscar mesas' });
   }
 });
+
+app.get('/mesas/reservadas', async (_req, res) => {
+  try {
+    const [result] = await db.query(`
+      SELECT DISTINCT mesas.id, mesas.numero
+      FROM mesas
+      JOIN reservas ON mesas.id = reservas.mesa_id
+    `);
+
+    res.json(result);
+  } catch (err) {
+    console.error('Erro ao buscar mesas reservadas:', err);
+    res.status(500).json({ error: 'Erro ao buscar mesas reservadas' });
+  }
+});
+
 
 app.post('/mesas', async (req, res) => {
   const { numero } = req.body;
@@ -64,8 +80,8 @@ app.delete('/mesas/:id', async (req, res) => {
 
 app.get('/garcons', async (_req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM garcons');
-    res.json(rows);
+    const [result] = await db.query('SELECT * FROM garcons');
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: 'Erro ao buscar garcons' });
   }
@@ -103,8 +119,8 @@ app.post('/garcons', async (req, res) => {
 
 app.get('/reservas', async (_req, res) => {
   try {
-    const [rows] = await db.query('SELECT * FROM reservas');
-    res.json(rows);
+    const [result] = await db.query('SELECT * FROM reservas');
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: 'Erro ao buscar reservas' });
   }
