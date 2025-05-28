@@ -185,7 +185,7 @@ app.put('/reservas/:id', async (req, res) => {
         mesa_id = ?,
         qtd_pessoas = ?,
         nome_responsavel = ?,
-        garcom_id = ?
+        garcom_id = ?,
         status = ?,
       WHERE id = ?`,
       [data, hora, mesa_id, qtd_pessoas, nome_responsavel, garcom_id || null, id]
