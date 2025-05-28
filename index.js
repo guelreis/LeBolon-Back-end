@@ -188,7 +188,7 @@ app.put('/reservas/:id', async (req, res) => {
         garcom_id = ?,
         status = ?,
       WHERE id = ?`,
-      [data, hora, mesa_id, qtd_pessoas, nome_responsavel, garcom_id || null, id]
+      [data, hora, mesa_id, qtd_pessoas, nome_responsavel, garcom_id, status || null, id]
     );
 
     if (result.length === 0) {
