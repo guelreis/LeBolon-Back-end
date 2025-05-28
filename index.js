@@ -173,12 +173,9 @@ app.put('/reservas/:id', async (req, res) => {
     mesa_id,
     qtd_pessoas,
     nome_responsavel,
-    garcom_id // opcional
+    garcom_id, // opcional
+    status
   } = req.body;
-
-  if (!data || !hora || !mesa_id || !qtd_pessoas || !nome_responsavel) {
-    return res.status(400).json({ error: 'Preencha todos os campos obrigatórios' });
-  }
 
   try {
     const [result] = await db.query(
@@ -189,6 +186,7 @@ app.put('/reservas/:id', async (req, res) => {
         qtd_pessoas = ?,
         nome_responsavel = ?,
         garcom_id = ?
+        status = ?,
       WHERE id = ?`,
       [data, hora, mesa_id, qtd_pessoas, nome_responsavel, garcom_id || null, id]
     );
@@ -205,7 +203,7 @@ app.put('/reservas/:id', async (req, res) => {
       qtd_pessoas,
       nome_responsavel,
       garcom_id: garcom_id || null,
-      status: 'atualizada'
+      status,
     });
 
   } catch (err) {
