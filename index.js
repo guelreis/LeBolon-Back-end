@@ -17,7 +17,13 @@ app.get('/mesas', async (_req, res) => {
 app.get('/mesas/reservadas', async (_req, res) => {
   try {
     const [result] = await db.query(`
-      SELECT DISTINCT mesas.id, mesas.numero
+      SELECT
+        mesas.id,
+        mesas.numero,
+        reservas.nome_responsavel,
+        reservas.data,
+        reservas.hora,
+        reservas.qtd_pessoas
       FROM mesas
       JOIN reservas ON mesas.id = reservas.mesa_id
     `);
