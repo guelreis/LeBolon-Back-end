@@ -1,5 +1,5 @@
 <div open align="center" >
-<h2>LeBolon - Backend API</h2>
+<h2>LeBolon - Backend API - (Projeto na Unifacs)</h2>
 
 O LeBolon é uma API RESTful desenvolvida para gerenciar o sistema de reservas de mesas em restaurantes. Este backend fornece endpoints para três tipos de usuários 
 (atendente, garçom e gerente) e gerencia todas as operações do sistema, incluindo criação de reservas, confirmações de ocupação e geração de relatórios.
